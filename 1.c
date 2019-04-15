@@ -99,11 +99,16 @@ int gameInfo() {
 }
 
 void gamePlay(TypeCard desktop[4][14], int remainCard, int gamemode) {
+  srand(time(NULL));
+  // playerInfo
+  int playerInfo = 0;
   // p1 card and p2 card
   int cp1 = 0, cp2 = 0;
   // 0 is human / c1 turn
   // 1 is c2 turn
   int turn = 0;
+  // computer select card 1 and 2
+  int num1 = 0, num2 = 0;
   // 0 is human / c1 win
   // 1 is c2 win
   int winner = 0;
@@ -112,20 +117,34 @@ void gamePlay(TypeCard desktop[4][14], int remainCard, int gamemode) {
   int size = 52;
   int comtbl[52] = {};
   for(int i = 0; i < size; i++) {
-    comtbl[i] = i;
+    comtbl[i] = i+1;
   }
 
   // random the desktop
-  rd(desktop);
+  //rd(desktop);
 
   // process game
   while(remainCard) {
     // 1st card and 2nd card row and col
     int row1, row2, col1, col2;
-    printf("\n");
-    showDesktop(desktop);
-    printf("\n");
-    if(gamemode == 1 && turn == 0) {
+    if (gamemode == 1 || !turn ){
+      printf("\n");
+      showDesktop(desktop);
+      printf("\n");
+    }
+
+    if(turn > 0) {
+      printf("Flipped cards: %d; ", 52-remainCard);
+      if(gamemode == 1) {
+        printf("You: %d; Computer: %d;", cp1, cp2);
+      } else if (gamemode == 2) {
+        printf("Computer 1: %d; Computer 2: %d;", cp1, cp2);
+      }
+      printf("\n");
+    }
+
+
+    if(gamemode == 1 && turn%2 == 0) {
       // human select
 
       // 1 is ok
@@ -137,7 +156,7 @@ void gamePlay(TypeCard desktop[4][14], int remainCard, int gamemode) {
         // set row1 and col1 to 0
         row1 = col1 = 0;
 
-        printf("Please input 1st card:\n");
+        printf("Please input 1st card: ");
         scanf("%d %d", &row1, &col1);
 
         if((row1 < 0 || row1 > 3) || (col1 < 1 || col1 > 13)) {
@@ -152,11 +171,9 @@ void gamePlay(TypeCard desktop[4][14], int remainCard, int gamemode) {
           desktop[row1][col1].status = 1;
         }
       }
-      printf("You chose 1st card (%d, %d) and it is \n", row1, col1);
+      printf("You chose 1st card (%d, %d) and it is ", row1, col1);
       printCard(desktop[row1][col1]);
       printf("\n");
-
-      sleep(1);
 
       // reset the lock
       inputCorrect = 0;
@@ -166,7 +183,7 @@ void gamePlay(TypeCard desktop[4][14], int remainCard, int gamemode) {
         // set row 2 and col2 to 0
         row2 = col2 = 0;
 
-          printf("Please input 2nd card:\n");
+          printf("Please input 2nd card: ");
           scanf("%d %d", &row2, &col2);
 
           if((row2 < 0 || row2 > 3) || (col2 < 1 || col2 > 13)) {
@@ -184,39 +201,141 @@ void gamePlay(TypeCard desktop[4][14], int remainCard, int gamemode) {
               desktop[row2][col2].status = 1;
           }
       }
-      printf("You chose 2nd card (%d, %d) and it is \n", row2, col2);
+      printf("You chose 2nd card (%d, %d) and it is ", row2, col2);
       printCard(desktop[row2][col2]);
       printf("\n");
 
-    } else if(gamemode == 2 || turn == 1) {
+    } else if(gamemode == 2 || turn%2 == 1) {
       // computer select
 
-      // get card 1
-      // random get row 1 and col 1
-      // still check condition 2, if fall into condition then random again
+      // get card 1 position
+      num1 = rand() % size + 1;
+      num2 = -1;
+      do {
+        // delay 1 second to advoid select 2 same card
+        sleep(1);
 
+        // get card 2 position
+        num2 = rand() % size + 1;
+      } while(num1 == num2);
 
-      // delay 1 second to advoid select 2 same card
-      sleep(1);
+      // get Card 1 row and col
+      int rCard1 = comtbl[--num1];
+      row1 = rCard1 / 13;
+      col1 = rCard1 % 13;
+      if(rCard1 == 52) {
+        row1 = 3;
+      }
+      if(col1 == 0) {
+        col1 = 13;
+      }
 
-      // get card 2
-      // random get row 2 and col 2
-      // still check condition 2 & 3, if fall into condition then random again
+      // set card status = 1
+      desktop[row1][col1].status = 1;
+      printf("Computer chose 1st card(%d, %d) and it is ", row1, col1);
+      printCard(desktop[row1][col1]);
+      printf("\n");
 
+      // get Card 2 row and col
+      int rCard2 = comtbl[--num2];
+      row2 = rCard2 / 13;
+      col2 = rCard2 % 13;
+      if(rCard2 == 52) {
+        row2 = 3;
+      }
+      if(col2 == 0) {
+        col2 = 13;
+      }
+
+      desktop[row2][col2].status = 1;
+      printf("Computer chose 1st card(%d, %d) and it is ", row2, col2);
+      printCard(desktop[row2][col2]);
+      printf("\n");
+
+      num1 = rCard1;
+      num2 = rCard2;
 
     }
 
     // if 2 card is match
+    if( ( ((desktop[row1][col1].suit=='C' && desktop[row2][col2].suit=='S') ||
+         (desktop[row1][col1].suit=='S' && desktop[row2][col2].suit=='C')) &&
+         (desktop[row1][col1].rank == desktop[row2][col2].rank) ) ||
+
+         (((desktop[row1][col1].suit=='D' && desktop[row2][col2].suit=='H') ||
+         (desktop[row1][col1].suit=='H' && desktop[row2][col2].suit=='D')) &&
+         (desktop[row1][col1].rank == desktop[row2][col2].rank)))
+      {
+      // printf("Correct\n");
       // change status
+      desktop[row1][col1].status = desktop[row2][col2].status = -1;
+
       // comtbl delete element and minus size
+      if(gamemode == 1 && turn%2 == 0) {
+        // user correct, delete
+        num1 = row1 * 13 + col1;
+        num2 = row2 * 13 + col2;
+      }
+
+      if(size-2 > 0) {
+
+        for(int i = 0; i < size; i++) {
+          if(comtbl[i] == num1) {
+            num1 = i;
+            break;
+          }
+        }
+
+        for(int i = num1; i < size-1; i++) {
+          comtbl[i] = comtbl[i+1];
+        }
+        size--;
+
+        for(int i = 0; i < size; i++) {
+          if(comtbl[i] == num2) {
+            num2 = i;
+            break;
+          }
+        }
+
+        for(int i = num2; i < size-1; i++) {
+          comtbl[i] = comtbl[i+1];
+        }
+        size--;
+      }
+
       // add play card
-    // if not match, reset the card status to 0
+      if(!(turn%2)) {
+          cp1 += 2;
+      } else {
+          cp2 += 2;
+      }
+      // decrease the remain Card
+      remainCard -= 2;
+    } else {
+      // printf("Incorrect\n");
+      // if not match, reset the card status to 0
+      desktop[row1][col1].status = desktop[row2][col2].status = 0;
+    }
 
     // finially chage turn
-
-
-
+    turn++;
   }
+
+  printf("\n");
+  showDesktop(desktop);
+  printf("\n");
+
+  printf("Flipped cards: %d; ", 52-remainCard);
+  if(gamemode == 1) {
+    printf("You: %d; Computer: %d;", cp1, cp2);
+  } else if (gamemode == 2) {
+    printf("Computer 1: %d; Computer 2: %d;", cp1, cp2);
+  }
+  printf("\n");
+
+  // print winning message
+
 
   return;
 }
@@ -235,28 +354,8 @@ int main(void) {
     int remainCard = 52;
     int gamemode = gameInfo();
 
-    if(gamemode == 1) {
-      // human vs computer
+    while (gamemode){
       gamePlay(desktop, remainCard, gamemode);
-    } else if(gamemode == 2) {
-      // computer vs computer
-    } else if(gamemode == 999) {
-      // show initial desktop
-      printf("Initial desktop:\n");
-      showDesktop(desktop);
-
-      // flipped all cards
-      for (int row = 0; row < 4; row++) {
-        for (int col = 1; col <= 13; col++) {
-          desktop[row][col].status = 1;
-        }
-      }
-
-      // show desktop
-      printf("\n\nRandom desktop\n");
-      rd(desktop);
-      showDesktop(desktop);
-    } else if(gamemode == 0) {
     }
 
     /* last statement of this C program */
