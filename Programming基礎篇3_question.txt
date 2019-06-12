@@ -1,0 +1,67 @@
+Q1. what is output?
+int a = 2, b = 10, x = 0;
+
+switch (x) {
+case 1: a = a + 1;
+	b = b + 1;
+	break;
+case 2: a = a - 1;
+	b = b - 1;
+	break;
+case 3: a = b;
+	break;
+default: b = a;
+}
+
+pritnf("%d", a+b);
+
+Q2. write the program that acccept an user input x, then output a sentence to user.
+if user input greater than 85, output Good, if user input greater than 75, output nice, input lower than 50, output fail
+------------
+input x: 90
+output: Good
+------------
+input x: 80
+output: nice
+------------
+input x: 40
+output: fail
+------------
+
+Q3. what is the value of b?
+int a = 2, b = 0;
+switch (a) {
+case 1:	b += 1;
+	break;
+case 2:	b += 2;
+	break;
+case 3: b += 3;
+	break;
+default: b = 8;
+}
+
+Q4. what is the value of b?
+int a = 2, b = 0;
+switch (a) {
+case 1:	b += 1;
+case 2:	b += 2;
+	break;
+case 3: b += 3;
+	break;
+default: b = 8;
+}
+
+Q5. what is the value of b?
+int a = 2, b = 0;
+switch (a) {
+case 1:	b += 1;
+case 2:	b += 2;
+case 3: b += 3;
+	break;
+default: b = 8;
+}
+
+Q6. what is the value of abc and def?
+int abc, def;
+abc = (5>6 || 7<=7);
+def = abc && 0;
