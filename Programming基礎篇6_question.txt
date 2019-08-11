@@ -1,0 +1,67 @@
+Q1. what is output
+#include <stdio.h>
+
+int fc(int i, char c) {
+    printf("%d, %c\n", i, c);
+    return 0;
+}
+
+int main() {
+    fc(1, 'a');
+    fc(2, 'c');
+    return 0;
+}
+
+Q2. what is output
+#include <stdio.h>
+
+void print_rectangle(int x, int y) {
+    printf("Rectangle size = %d\n", x*y);
+}
+
+int main() {
+    print_rectangle(5,6);
+    return 0;
+}
+
+Q3. what is output
+#include <stdio.h>
+
+void print_rectangle(int x, int y) {
+    printf("Rectangle size = %d\n", x*y);
+}
+
+int main() {
+    print_rectangle(5.5,6.7);
+    return 0;
+}
+
+Q4. what is output
+#include <stdio.h>
+
+void print_rectangle(double x, double y) {
+    printf("Rectangle size = %lf\n", x*y);
+}
+
+int main() {
+    print_rectangle(5.5 , 6.7);
+    return 0;
+}
+
+Q5.(Pass-by-Value) what is output
+#include <stdio.h>
+
+void print_cube(int num) {
+    num = num * num * num;
+    printf("Cube = %d\n", num);
+    printf("num in fc = %d\n", num);
+}
+
+int main() {
+    int num = 2;
+    print_cube(num);
+    num = 3;
+    print_cube(num);
+    printf("num = %d\n", num);
+    return 0;
+}
