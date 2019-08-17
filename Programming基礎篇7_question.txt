@@ -1,0 +1,333 @@
+Q1. write down the output of this program
+#include <stdio.h>
+int k = 10;
+int main()
+{
+    int k = 0;
+    for (int i = 0; i < 10; i++) {
+        int k = i;
+    }
+    printf("%d\n", k);
+    return 0;
+}
+
+Q2. write down the output of this program
+#include <stdio.h>
+int k = 10;
+int main()
+{
+    int k = 0;
+    for (int i = 0; i < 10; i++) {
+        k = i;
+    }
+    printf("%d\n", k);
+    return 0;
+}
+
+Q3. write down the output of this program
+#include <stdio.h>
+int a = 1;
+int main()
+{
+    int a = 2;
+    {
+        int a = 3;
+        printf("%d\n", a);
+    }
+    return 0;
+}
+
+Q4. write down the output of this program
+#include <stdio.h>
+int a = 1;
+int main()
+{
+    int a = 2;
+    {
+        int a = 3;
+    }
+    printf("%d\n", a);
+    return 0;
+}
+
+Q5. write down the output of this program
+#include <stdio.h>
+int a = 1;
+int main()
+{
+    int a = 2;
+    {
+        a = 3;
+    }
+    printf("%d\n", a);
+    return 0;
+}
+Q6. Here is an example code for you to understand the scope rules,
+you can first write down the output of this program, then run it on 
+computer to check your answer, or you can just run it to see the outcome.
+
+#include <stdio.h>
+
+void useLocal( void ); // function prototype
+void useGlobal( void ); // function prototype
+
+int x = 1; // global variable
+
+int main() {
+
+  printf("global x in main is %d\n", x);
+  
+  int x = 5; // local variable to main function
+
+  printf("local x in main's outer scope is %d\n", x);
+
+  { // start a new scope (inner scope)
+    int x = 7; // hides x in outer scope
+    printf("local x in main's inner scope is %d\n", x);
+  } // end new scope (inner scope)
+
+  printf("local x in main's outer scope is %d\n", x);
+
+  useLocal();   // useLocal has local x
+  useGlobal();  // useGlobal uses global x
+  useLocal();   // useLocal reinitializes its local x
+  useGlobal();  // global x also retains its value
+
+  printf("\nlocal x in main is %d\n", x);
+
+  return 0;
+} // end main
+
+// useLocal reinitializes local variable x during each call
+void useLocal( void ) {
+  int x = 25; // initialized each time useLocal is called
+
+  printf("\nlocal x is %d on entering useLocal\n", x);
+
+  x++;
+
+  printf("local x is %d on exiting useLocal\n", x);
+} // end function useLocal
+
+// useGlobal modifies global variable x during each call
+void useGlobal( void ) {
+  printf("\nglobal x is %d on entering useGlobal\n", x);
+
+  x *= 10;
+
+  printf("global x is %d on exiting useGlobal\n", x);
+} // end function useGlobal
+
+Q7. what is the output of the program
+#include <stdio.h>
+
+void f1(int a, int &b) {
+  a = 3;
+  b = 4;
+}
+
+int main() {
+  int x = 1, y = 2;
+  f1(x,y);
+
+  printf("x is %d\n", x);
+  printf("y is %d\n", y);
+}
+
+Q8. what is the output of the program
+#include <stdio.h>
+
+void f2(int &, int &); //Function prototype includes the "&" sign
+
+int main() {
+  int x = 1, y = 2;
+  f2(x, y);
+  printf("x is %d\ny is %d\n", x, y);
+
+  return 0;
+}
+
+void f2(int &a, int &b) {
+  b = a;
+}
+
+Q9. what is the output of the program
+#include <stdio.h>
+
+int f3(int &a) {
+  int c = 4;
+  a = 3;
+  return c;
+}
+
+int main() {
+  int x = 1, y = 2;
+  y = f3(x);
+  printf("x is %d\ny is %d\n", x, y);
+
+  return 0;
+}
+
+Q10. what is the output of the program
+#include <stdio.h>
+
+int f4(int &a, int &b) {
+  int c;
+  a = 3;
+  b = 4;
+  return c = a + b;
+}
+
+int main() {
+  int x = 1, y = 2, z = 3;
+  z = f3(x, y);
+  printf("x is %d\ny is %d\nz is %d\n", x, y, z);
+
+  return 0;
+}
+
+Q11. HKCC C++ past-paper question
+Determine the output of the following program
+
+#include <stdio.h>
+
+int a = 2;
+
+int fn(int b, int & c) {
+  b *= a;
+  c *= a;
+  a *= 2;
+  return b + c;
+}
+
+int main() {
+  int a = 5, b = 6, c = 7;
+  printf("%d\n", fn(a, b));
+  printf("%d\n", fn(b, c));
+  printf("%d %d %d\n", a, b, c);
+
+  return 0;
+}
+
+Q12. what is the output of the program
+void f1(int &a, int b) {
+  a++;
+  b++;
+}
+
+int main () {
+  int a = 2, b = 4;
+  f1(a,b);
+  printf("%d %d\n", a, b);
+}
+
+Q13. what is the output of the program
+int f1(int a){
+  if (a == 1) return 1;
+  else return a + f1(a-1);
+}
+
+int main(){
+  printf("%d\n", f1(5));
+}
+
+Q14. what is the output of the program
+#include <stdio.h>
+
+int num = 0;
+
+void fn(int x) {
+  if (x <= 0) return;
+
+  fn(x - 1);
+
+  printf("%d : %d\n", x, num);
+  num += x;
+}
+
+int main (){
+  int num = 5;
+  fn(num);
+  printf("%d\n",num);
+  return 0;
+}
+
+Q15. what is the output of the program
+#include <stdio.h>
+
+int num = 0;
+
+void fn(int x) {
+  if (x <= 0) return;
+
+  printf("%d : %d\n", x, num);
+  fn(x - 1);
+
+  num += x;
+}
+
+int main (){
+  int num = 5;
+  fn(num);
+  printf("%d\n",num);
+  return 0;
+}
+
+Q16. what is the output of the function
+#include <stdio.h>
+
+int num = 0;
+
+void fn(int num) {
+  if ( num == 1)
+    printf("%d", num % 2);
+  else 
+  {
+    fn(num / 2); 
+    printf("%d", num % 2);
+  }
+  
+}
+
+int main (){
+  int num = 9;
+  printf("%d: ", num);
+  fn(num);
+  return 0;
+}
+
+Q17. what is the output of the function
+#include <stdio.h>
+
+int i = 0;
+
+void fn(int x) {
+  if (x == 0) return;
+
+  printf("times : %d\nx = %d\n", i++, x);
+
+  fn(--x);
+}
+
+int main() {
+  int x = 10;
+  fn(x);
+}
+
+Q18. what is the output of the function
+#include <stdio.h>
+
+int i = 0;
+
+void fn(int x) {
+  if (x == 0) return;
+  fn(--x);
+  printf("times : %d\nx = %d\n", i++, x);
+}
+
+int main() {
+  int x = 10;
+  fn(x);
+}
+
+Q19. what is the different of Q17 and Q18? What make this happened?
